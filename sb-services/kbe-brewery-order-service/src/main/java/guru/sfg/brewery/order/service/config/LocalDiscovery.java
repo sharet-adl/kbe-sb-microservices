@@ -1,7 +1,7 @@
 package guru.sfg.brewery.order.service.config;
 
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Profile;
 
 /**
@@ -9,6 +9,6 @@ import org.springframework.context.annotation.Profile;
  */
 @EnableDiscoveryClient
 @Profile("local-discovery")
-@Configuration
+@AutoConfiguration
 public class LocalDiscovery {
 }

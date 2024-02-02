@@ -6,10 +6,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.Type;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
+import org.hibernate.type.SqlTypes;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -28,7 +31,8 @@ public class BeerInventory {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Type(type="org.hibernate.type.UUIDCharType")
+    @JdbcTypeCode(SqlTypes.CHAR)
+    //@Type(type="org.hibernate.type.UUIDCharType")
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false )
     private UUID id;
 
@@ -48,7 +52,8 @@ public class BeerInventory {
 
     private String upc;
 
-    @Type(type="org.hibernate.type.UUIDCharType")
+    //@Type(type="org.hibernate.type.UUIDCharType")
+    @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar(36)")
     private UUID beerId;
     private Integer quantityOnHand;

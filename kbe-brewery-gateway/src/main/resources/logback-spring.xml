@@ -10,10 +10,38 @@
     <property name="CONSOLE_LOG_PATTERN"
               value="%clr(%d{yyyy-MM-dd HH:mm:ss.SSS}){faint} %clr(${LOG_LEVEL_PATTERN:-%5p}) %clr(${PID:- }){magenta} %clr(---){faint} %clr([%15.15t]){faint} %clr(%-40.40logger{39}){cyan} %clr(:){faint} %m%n${LOG_EXCEPTION_CONVERSION_WORD:-%wEx}"/>
 
+    <!--property name="TRACE_PATTERN_CONSOLE" value="%5p [%X{applicationName},%X{traceId:-},%X{spanId:-}]" /-->
+
+    <!--property name="guru.sfg.brewery.logging.json.pattern.default"
+              value='{
+                ${CONSOLE_LOG_PATTERN},
+                ${TRACE_PATTERN_CONSOLE:-%5p}
+                }'
+              /-->
+
     <!-- Appender to log to console in a JSON format -->
     <appender name="jsonConsole" class="ch.qos.logback.core.ConsoleAppender">
+        <!--filter class="ch.qos.logback.classic.filter.ThresholdFilter">
+            <level>${guru.sfg.brewery.logging.filter.jsonConsole:-ALL}</level>
+        </filter>
+
+        <filter class="ch.qos.logback.core.filter.EvaluatorFilter">
+            <evaluator class="ch.qos.logback.classic.boolex.OnMarkerEvaluator">
+                <marker>AUDIT</marker>
+                <marker>API_INFO</marker>
+            </evaluator>
+            <onMatch>DENY</onMatch>
+            <onMismatch>ACCEPT</onMismatch>
+        </filter-->
+
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
+                <!--nestedField>
+                    <fieldName>mdc</fieldName>
+                    <providers>
+                        <mdc/>
+                    </providers>
+                </nestedField-->
                 <timestamp>
                     <timeZone>UTC</timeZone>
                 </timestamp>
@@ -59,8 +87,9 @@
                         <exclude>^java\.lang\.Thread\.run$</exclude>
                     </throwableConverter>
                 </stackTrace>
+                <!-- trace.id, sapn.id -->
                 <pattern>
-                    <omitEmptyFields>true</omitEmptyFields>
+                    <!--omitEmptyFields>true</omitEmptyFields-->
                     <pattern>
                         {
                             "trace": {
@@ -72,12 +101,16 @@
                         }
                     </pattern>
                 </pattern>
+
                 <mdc>
                     <excludeMdcKeyName>traceId</excludeMdcKeyName>
                     <excludeMdcKeyName>spanId</excludeMdcKeyName>
                     <excludeMdcKeyName>parentId</excludeMdcKeyName>
                     <excludeMdcKeyName>sampled</excludeMdcKeyName>
                 </mdc>
+                <!--pattern>
+                    <pattern><![CDATA[${guru.sfg.brewery.logging.json.pattern.default}]]></pattern>
+                </pattern-->
             </providers>
         </encoder>
     </appender>

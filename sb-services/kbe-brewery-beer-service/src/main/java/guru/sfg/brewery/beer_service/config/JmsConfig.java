@@ -2,7 +2,8 @@ package guru.sfg.brewery.beer_service.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
@@ -10,7 +11,8 @@ import org.springframework.jms.support.converter.MessageType;
 /**
  * Created by jt on 2019-06-24.
  */
-@Configuration
+@EnableJms
+@AutoConfiguration
 public class JmsConfig  {
 
     public static final String BREWING_REQUEST_QUEUE = "brewing-request";

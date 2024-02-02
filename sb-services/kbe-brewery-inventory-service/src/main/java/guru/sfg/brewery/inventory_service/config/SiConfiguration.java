@@ -5,7 +5,7 @@ package guru.sfg.brewery.inventory_service.config;
  */
 //@EnableIntegration
 //@IntegrationComponentScan
-//@Configuration
+//@AutoConfiguration
 public class SiConfiguration {
 
 //    @Bean(name = PollerMetadata.DEFAULT_POLLER)

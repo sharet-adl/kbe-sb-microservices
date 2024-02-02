@@ -2,7 +2,8 @@ package guru.sfg.brewery.inventory_service.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
+import org.springframework.jms.annotation.EnableJms;
 import org.springframework.jms.support.converter.MappingJackson2MessageConverter;
 import org.springframework.jms.support.converter.MessageConverter;
 import org.springframework.jms.support.converter.MessageType;
@@ -10,8 +11,8 @@ import org.springframework.jms.support.converter.MessageType;
 /**
  * Created by jt on 2019-05-31.
  */
-//@EnableJms
-@Configuration
+@EnableJms
+@AutoConfiguration
 public class JmsConfig {
     public static final String ALLOCATE_ORDER_QUEUE = "allocate-order";
     public static final String ALLOCATE_ORDER_RESULT_QUEUE = "allocate-order-result";

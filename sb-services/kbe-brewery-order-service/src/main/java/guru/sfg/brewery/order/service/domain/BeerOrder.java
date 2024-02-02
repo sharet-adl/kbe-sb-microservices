@@ -19,9 +19,11 @@ package guru.sfg.brewery.order.service.domain;
 import lombok.*;
 import org.hibernate.annotations.*;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.*;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import org.hibernate.type.SqlTypes;
+
 import java.sql.Timestamp;
 import java.util.Set;
 import java.util.UUID;
@@ -45,7 +47,8 @@ public class BeerOrder {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Type(type="org.hibernate.type.UUIDCharType")
+    @JdbcTypeCode(SqlTypes.CHAR)
+    //@Type(type="org.hibernate.type.UUIDCharType")
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false )
     private UUID id;
 

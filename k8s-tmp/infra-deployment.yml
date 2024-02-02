@@ -107,7 +107,7 @@ spec:
         app: jms
     spec:
       containers:
-      - image: vromero/activemq-artemis
+      - image: apache/activemq-artemis
         name: activemq-artemis
         resources: {}
         ports:

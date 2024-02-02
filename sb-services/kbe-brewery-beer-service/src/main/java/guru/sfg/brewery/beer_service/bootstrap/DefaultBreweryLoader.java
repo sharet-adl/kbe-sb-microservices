@@ -62,7 +62,7 @@ public class DefaultBreweryLoader implements CommandLineRunner {
         loadBreweryData();
         loadBeerData();
 
-        cacheManager.getCache("beerListCache").clear();
+        //cacheManager.getCache("beerListCache").clear();
         log.debug("Data Initialized. Beer Records loaded {}", beerRepository.count());
     }
 

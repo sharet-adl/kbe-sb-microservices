@@ -3,9 +3,12 @@ package guru.sfg.brewery.order.service.sm;
 import guru.sfg.brewery.order.service.domain.BeerOrderEventEnum;
 import guru.sfg.brewery.order.service.domain.BeerOrderStatusEnum;
 import lombok.RequiredArgsConstructor;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.statemachine.action.Action;
+import org.springframework.statemachine.config.EnableStateMachine;
 import org.springframework.statemachine.config.EnableStateMachineFactory;
+import org.springframework.statemachine.config.EnumStateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.StateMachineConfigurerAdapter;
 import org.springframework.statemachine.config.builders.StateMachineStateConfigurer;
 import org.springframework.statemachine.config.builders.StateMachineTransitionConfigurer;
@@ -13,9 +16,11 @@ import org.springframework.statemachine.config.builders.StateMachineTransitionCo
 import java.util.EnumSet;
 
 @RequiredArgsConstructor
+//@AutoConfiguration - not working fine, bean for StateMachineFactory will not get autowired !
 @Configuration
 @EnableStateMachineFactory
 public class BeerOrderStateMachineConfig extends StateMachineConfigurerAdapter<BeerOrderStatusEnum, BeerOrderEventEnum> {
+//public class BeerOrderStateMachineConfig extends EnumStateMachineConfigurerAdapter<BeerOrderStatusEnum, BeerOrderEventEnum> {
 
     private final Action<BeerOrderStatusEnum, BeerOrderEventEnum> validateBeerOrder;
     private final Action<BeerOrderStatusEnum, BeerOrderEventEnum> allocateBeerOrder;

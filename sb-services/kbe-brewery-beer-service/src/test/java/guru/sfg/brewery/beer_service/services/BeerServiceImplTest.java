@@ -18,7 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -40,7 +40,7 @@ import static org.mockito.BDDMockito.then;
 @SpringJUnitConfig(classes = {BeerServiceImplTest.BeerServiceConfig.class})
 class BeerServiceImplTest {
 
-    @Configuration
+    @AutoConfiguration
     static class BeerServiceConfig {
 
         @Bean

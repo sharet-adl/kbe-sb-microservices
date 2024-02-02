@@ -2,7 +2,7 @@ package guru.sfg.brewery.inventoryfailover.config;
 
 import guru.sfg.brewery.inventoryfailover.web.InventoryHandler;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.web.reactive.function.server.RouterFunction;
 
 import static org.springframework.http.MediaType.APPLICATION_JSON;
@@ -13,7 +13,7 @@ import static org.springframework.web.reactive.function.server.RouterFunctions.r
 /**
  * Created by jt on 3/13/20.
  */
-@Configuration
+@AutoConfiguration
 public class RouterConfig {
 
     @Bean

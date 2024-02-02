@@ -19,8 +19,10 @@ package guru.sfg.brewery.order.service.domain;
 import lombok.*;
 import org.hibernate.annotations.*;
 
-import javax.persistence.Entity;
-import javax.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.*;
+import org.hibernate.type.SqlTypes;
+
 import java.sql.Timestamp;
 import java.util.UUID;
 
@@ -43,7 +45,8 @@ public class BeerOrderLine {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    @Type(type="org.hibernate.type.UUIDCharType")
+    //@Type(type="org.hibernate.type.UUIDCharType")
+    @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar(36)", updatable = false, nullable = false )
     private UUID id;
 
@@ -64,7 +67,8 @@ public class BeerOrderLine {
     @ManyToOne
     private BeerOrder beerOrder;
 
-    @Type(type="org.hibernate.type.UUIDCharType")
+    //@Type(type="org.hibernate.type.UUIDCharType")
+    @JdbcTypeCode(SqlTypes.CHAR)
     @Column(length = 36, columnDefinition = "varchar(36)")
     private UUID beerId;
 

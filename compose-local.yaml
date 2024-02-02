@@ -1,16 +1,33 @@
 version: '3.8'
 services:
     mysql:
-        image: mysql:5.7
+        image: mysql:8.3
+        #image: mysql:5.7
+        #platform: linux/x86_64 # dirty hack - avoid
+        #command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --init-connect='SET NAMES UTF8;' --innodb-flush-log-at-trx-commit=0
+        ports:
+        - 33306:3306
         environment:
             MYSQL_ROOT_PASSWORD: dbpassword
             MYSQL_DATABASE: beerservice
+            #MYSQL_USER=testuser
+            #MYSQL_PASSWORD=testpassword
     elasticsearch:
         image: docker.elastic.co/elasticsearch/elasticsearch:7.12.1
         ports:
             - 9200:9200
         environment:
             discovery.type: single-node
+#            ES_JAVA_OPTS__: "-Xms512m -Xmx512m"
+#            xpack.security.enabled: true
+#            xpack.security.authc.api_key.enabled: true
+#            ELASTIC_PASSWORD: changeme
+#        ulimits:
+#            memlock:
+#                soft: -1
+#                hard: -1
+        #volumes:
+        #    - elasticsearch:/usr/share/elasticsearch/data
     kibana:
         image: docker.elastic.co/kibana/kibana:7.12.1
         ports:
@@ -18,8 +35,14 @@ services:
         restart: on-failure
         depends_on:
             - elasticsearch
+#        environment:
+#            ELASTICSEARCH_HOSTS: http://elasticsearch:9200
+#            ELASTICSEARCH_USERNAME: elastic
+#            ELASTICSEARCH_PASSWORD: changeme
     filebeat:
         image: docker.elastic.co/beats/filebeat:7.12.1
+        # Uncomment the command: line below for a Windows-based filebeat Docker deployment:
+        # command: filebeat -e -strict.perms=false
         volumes:
             - ./filebeat/filebeat.docker.yml:/usr/share/filebeat/filebeat.yml:ro # Configuration file
             - /var/lib/docker/containers:/var/lib/docker/containers:ro           # Docker logs
@@ -27,7 +50,10 @@ services:
         user: root                                                             # Allow access to log files and docker.sock
         restart: on-failure
     jms:
-        image: vromero/activemq-artemis
+        image: apache/activemq-artemis
+        environment:
+            ARTEMIS_USER: artemis
+            ARTEMIS_PASSWORD: simetraehcapa
         ports:
             - 8161:8161
             - 61616:61616
@@ -42,7 +68,9 @@ services:
             SPRING_DATASOURCE_PASSWORD: dbpassword
             SPRING_JPA_HIBERNATE_DDL-AUTO: update
             SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/beerservice?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-            SPRING_ARTEMIS_HOST: jms
+            SPRING_ARTEMIS_BROKER-URL: tcp://jms:61616
+            #SPRING_SECURITY_USER_NAME: good
+            #SPRING_SECURITY_USER_PASSWORD: beer
         restart: on-failure
         labels:
             collect_logs_with_filebeat: "true"
@@ -55,17 +83,25 @@ services:
         image: springframeworkguru/kbe-brewery-beer-service
         ports:
             - 8080:8080
+            #- 5005:5005
         depends_on:
-            - inventory
+            - inventory-service
             - jms
         restart: on-failure
+        #entrypoint: "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005 -Djava.security.egd=file:/dev/./urandom org.springframework.boot.loader.launch.JarLauncher"
         environment:
             SPRING_DATASOURCE_USER: root
             SPRING_DATASOURCE_PASSWORD: dbpassword
             SPRING_JPA_HIBERNATE_DDL-AUTO: update
-            SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/beerservice?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-            SPRING_ARTEMIS_HOST: jms
+            #SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/beerservice?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+            SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/beerservice?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
+            #SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/beerservice?serverTimezone=UTC&allowPublicKeyRetrieval=true&useSSL=false
+            SPRING_DATASOURCE_DRIVER-CLASS-NAME: com.mysql.cj.jdbc.Driver
+            #SPRING_DATASOURCE_URL: jdbc:mariadb://mysql:3306/beerservice?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+            #SPRING_ARTEMIS_HOST: jms
+            SPRING_ARTEMIS_BROKER-URL: tcp://jms:61616
             SFG_BREWERY_BEER-INVENTORY-SERVICE-HOST: http://inventory-service:8082
+            LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_CACHE: trace
         labels:
             collect_logs_with_filebeat: "true"
             decode_log_event_to_json_object: "true"
@@ -73,17 +109,22 @@ services:
         image: springframeworkguru/kbe-brewery-order-service
         ports:
             - 8081:8081
+            #- 5005:5005
         depends_on:
             - beer-service
             - jms
         restart: on-failure
+        #entrypoint: "java -agentlib:jdwp=transport=dt_socket,server=y,suspend=y,address=*:5005 -Djava.security.egd=file:/dev/./urandom org.springframework.boot.loader.launch.JarLauncher"
         environment:
             SPRING_DATASOURCE_USER: root
             SPRING_DATASOURCE_PASSWORD: dbpassword
             SPRING_JPA_HIBERNATE_DDL-AUTO: update
             SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/beerservice?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
-            SPRING_ARTEMIS_HOST: jms
+            #SPRING_ARTEMIS_HOST: jms
+            SPRING_ARTEMIS_BROKER-URL: tcp://jms:61616
             SFG_BREWERY_BEER-SERVICE-HOST: http://beer-service:8080
+            LOGGING_LEVEL_ORG_APACHE_ACTIVEMQ: info
+            #LOGGING_LEVEL_ORG_APACHE_ACTIVEMQ_SPRING: trace
         labels:
             collect_logs_with_filebeat: "true"
             decode_log_event_to_json_object: "true"
@@ -92,7 +133,7 @@ services:
         ports:
             - 9090:9090
         depends_on:
-            - inventory
+            - inventory-service
             - beer-service
             - order-service
             - inventory-failover
@@ -100,6 +141,8 @@ services:
         labels:
             collect_logs_with_filebeat: "true"
             decode_log_event_to_json_object: "true"
+        environment:
+            SPRING_ZIPKIN_ENABLED: "true"
 
 
 

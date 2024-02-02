@@ -17,11 +17,11 @@ public class SfgBreweryGatewayApplication {
     public RouteLocator gatewayRoutes(RouteLocatorBuilder builder) {
 
         return builder.routes()
-                .route("beer-service", r -> r.path("/api/v1/beer/*", "/api/v1/beerUpc/*")
+                .route("beer-service", r -> r.path("/api/v1/beer", "/api/v1/beer/*", "/api/v1/beerUpc", "/api/v1/beerUpc/*")
                         .uri("http://beer-service:8080"))
                 .route("inventory-service", r -> r.path("/api/v1/beer/*/inventory")
                         .uri("http://inventory-service:8082"))
-                .route("order-service", r -> r.path(("/api/v1/customers/**"))
+                .route("order-service", r -> r.path("/api/v1/customers", "/api/v1/customers/**")
                         .uri("http://order-service:8081"))
                 .build();
     }

@@ -7,7 +7,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.4.6</version>
+        <version>3.2.0</version>
         <relativePath /> <!-- lookup parent from repository -->
     </parent>
 
@@ -20,17 +20,28 @@
     <packaging>pom</packaging>
 
     <properties>
-        <maven.compiler.source>11</maven.compiler.source>
-        <maven.compiler.target>11</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <jaxb.version>2.3.0</jaxb.version>
-        <org.mapstruct.version>1.4.2.Final</org.mapstruct.version>
-        <org.projectlombok.version>1.18.20</org.projectlombok.version>
-        <swagger-request-validator.version>2.15.1</swagger-request-validator.version>
-        <spring-cloud.version>2020.0.2</spring-cloud.version>
-        <logstash.logback.version>6.3</logstash.logback.version>
+        <org.mapstruct.version>1.5.5.Final</org.mapstruct.version>
+        <org.projectlombok.version>1.18.24</org.projectlombok.version>
+        <swagger-request-validator.version>2.40.0</swagger-request-validator.version>
+        <spring-cloud.version>2023.0.0</spring-cloud.version>
+        <logstash.logback.version>7.3</logstash.logback.version>
         <docker.image.prefix>springframeworkguru</docker.image.prefix>
         <docker.image.name>${project.artifactId}</docker.image.name>
         <docker.skip>true</docker.skip>
+        <!--jackson.version>2.15.2</jackson.version-->
+        <jackson.version>2.7.5</jackson.version>
+        <jakarta.activation-api.version>2.1.2</jakarta.activation-api.version>
+        <jakarta.xml.bind-api.version>4.0.0</jakarta.xml.bind-api.version>
+        <javax.activation.version>1.2.0</javax.activation.version>
+        <!--ehcache.version>3.5.2</ehcache.version-->
+        <ehcache.version>3.10.8</ehcache.version>
+        <jaxb.runtime.version>4.0.3</jaxb.runtime.version>
+        <!--jaxb.runtime.version>2.3.6</jaxb.runtime.version-->
+        <!--glassfish-jaxb.version>2.3.0</glassfish-jaxb.version-->
     </properties>
 
     <modules>
@@ -67,6 +78,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <jvmArguments>-Dspring.application.main.admin.enabled=true</jvmArguments>
                 </configuration>
             </plugin>
             <plugin>
@@ -85,7 +97,7 @@
             <plugin>
                 <groupId>io.fabric8</groupId>
                 <artifactId>docker-maven-plugin</artifactId>
-                <version>0.35.0</version>
+                <version>0.43.4</version>
                 <configuration>
                     <verbose>true</verbose>
                     <images>
@@ -106,6 +118,16 @@
                         </image>
                     </images>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>push-to-docker</id>
+                        <phase>deploy</phase>
+                        <goals>
+                            <goal>build</goal>
+                            <goal>push</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

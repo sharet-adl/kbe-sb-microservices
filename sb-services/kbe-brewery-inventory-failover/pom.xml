@@ -15,7 +15,7 @@
     <description>KBE Inventory Failover Service</description>
 
     <properties>
-        <java.version>11</java.version>
+        <java.version>17</java.version>
         <docker.skip>false</docker.skip>
     </properties>
 
@@ -27,7 +27,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+            <!--optional>true</optional-->
         </dependency>
         <dependency>
             <groupId>net.logstash.logback</groupId>

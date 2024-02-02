@@ -1,0 +1,511 @@
+{
+	"info": {
+		"_postman_id": "5b0ce6dc-4a7f-4358-b9ac-c69430b6c9e0",
+		"name": "Spring",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "List Beers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"beerId\" , jsonData.content[0].id);",
+							"postman.setEnvironmentVariable(\"beerName\" , jsonData.content[0].beerName);",
+							"postman.setEnvironmentVariable(\"beerUpc\" , jsonData.content[0].upc);",
+							"console.log(\"Response was: \" + jsonData)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/beer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"beer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Beer-X",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/beer/{{beerId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"beer",
+						"{{beerId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Beer-X by upc",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/beerUpc/{{beerUpc}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"beerUpc",
+						"{{beerUpc}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create Beer",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"beerName\": \"{{beer2Name}}\",\n    \"beerStyle\": \"ALE\",\n    \"upc\": \"{{beer2Upc}}\",\n    \"quantityOnHand\": 20,\n    \"price\": 21\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/beer",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"beer"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List Beers - APIGW",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:9090/api/v1/beer/{{beerId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "9090",
+					"path": [
+						"api",
+						"v1",
+						"beer",
+						"{{beerId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get inventory of Beer-X",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic Z29vZDpiZWVy",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8082/api/v1/beer/{{beerId}}/inventory?",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"v1",
+						"beer",
+						"{{beerId}}",
+						"inventory"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get inventory health",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic Z29vZDpiZWVy",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8082/actuator/health?",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"actuator",
+						"health"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get inventory-failover_",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8082/api/v1/beer/17065248-d8a6-4257-b6ad-b6fc3a2c0bc5/inventory",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"v1",
+						"beer",
+						"17065248-d8a6-4257-b6ad-b6fc3a2c0bc5",
+						"inventory"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List customers",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"customerId\" , jsonData.content[0].id);",
+							"postman.setEnvironmentVariable(\"customerName\" , jsonData.content[0].customerName);",
+							"console.log(\"Response was: \" + jsonData)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/api/v1/customers/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List orders of customer",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8081/api/v1/customers/{{customerId}}/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"{{customerId}}",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order Beer",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"postman.setEnvironmentVariable(\"beerOrderId\" , jsonData.id);",
+							"postman.setEnvironmentVariable(\"beerOrderLine0Id\" , jsonData.beerOrderLines[0].id);",
+							"console.log(\"Response was: \" + jsonData)"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"beerOrderLines\": [\n        {\n            \"upc\": \"{{beerUpc}}\",\n            \"orderQuantity\": 1,\n            \"quantityAllocated\": \"1\",\n            \"isNew\": true\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/customers/{{customerId}}/orders",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"{{customerId}}",
+						"orders"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Order",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"beerOrderLines\": [\n        {\n            \"upc\": \"0631234300019\",\n            \"orderQuantity\": 1,\n            \"quantityAllocated\": \"1\",\n            \"isNew\": true\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/customers/{{customerId}}/orders/{{beerOrderId}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"{{customerId}}",
+						"orders",
+						"{{beerOrderId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Order pickup",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"beerOrderLines\": [\n        {\n            \"upc\": \"0631234300019\",\n            \"orderQuantity\": 1,\n            \"quantityAllocated\": \"1\",\n            \"isNew\": true\n        }\n    ]\n}"
+				},
+				"url": {
+					"raw": "http://localhost:8081/api/v1/customers/{{customerId}}/orders/{{beerOrderId}}/pickup",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8081",
+					"path": [
+						"api",
+						"v1",
+						"customers",
+						"{{customerId}}",
+						"orders",
+						"{{beerOrderId}}",
+						"pickup"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get inventory of Beer-X Copy",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "default"
+					},
+					{
+						"key": "Authorization",
+						"value": "Basic Z29vZDpiZWVyCg==",
+						"type": "default"
+					}
+				],
+				"url": {
+					"raw": "http://localhost:8082/api/v1/beer/{{beerId}}/inventory?",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"api",
+						"v1",
+						"beer",
+						"{{beerId}}",
+						"inventory"
+					],
+					"query": [
+						{
+							"key": "",
+							"value": null
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

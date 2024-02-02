@@ -250,7 +250,7 @@ class BeerControllerTest {
                     .content(beerDtoJson))
                     .andExpect(status().isBadRequest());
 
-            then(beerService).shouldHaveZeroInteractions();
+            then(beerService).shouldHaveNoInteractions();
         }
     }
 
@@ -286,7 +286,7 @@ class BeerControllerTest {
                     .content(beerDtoJson))
                     .andExpect(status().isBadRequest());
 
-            then(beerService).shouldHaveZeroInteractions();
+            then(beerService).shouldHaveNoInteractions();
         }
     }
 }
